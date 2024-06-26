@@ -1,0 +1,60 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Person {
+    private String name;
+    private String birthday;
+    private String gender;
+    private String birthCity;
+
+    public static void main(String[] params){
+        Scanner scan = new Scanner(System.in);
+
+        System.out.print("Digite o nome:");
+        String name = scan.nextLine();
+        System.out.print("Digite a data de nascimento:");
+        String birthday = scan.nextLine();
+        System.out.print("Digite o genero:");
+        String gender = scan.nextLine();
+        System.out.print("Digite a cidade de nascimento:");
+        String birthCity = scan.nextLine();
+
+        Person pessoa = new Person(name, birthday, gender, birthCity);
+        pessoa.create();
+
+        ArrayList<String> allPersons = getAll();
+        for (String personData : allPersons) {
+            String[] personAttributes = personData.split(";");
+            if (personAttributes.length == 4) {
+                Person person = new Person(personAttributes[0], personAttributes[1], personAttributes[2], personAttributes[3]);
+                System.out.println(person.toString());
+            } else {
+                System.out.println("Dados incompletos para a pessoa: " + personData);
+            }
+        }
+    }
+
+    public Person(String name, String birthday, String gender, String birthCity){
+        this.name = name;
+        this.birthday = birthday;
+        this.gender = gender;
+        this.birthCity = birthCity;
+    }
+
+    public void create(){
+        FileControl personControl = new FileControl("person.txt");
+
+        String newPerson = this.name + ";" + this.birthday + ";" + this.gender + ";" + this.birthCity;
+        personControl.insert(newPerson);
+    }
+
+    public static ArrayList<String> getAll(){
+        FileControl personControl = new FileControl("person.txt");
+        return personControl.getAll();
+    }
+
+    public String toString(){
+        return "{ nome: " + this.name + " data de nascimento: " + this.birthday + " genero: " + this.gender + " cidade de nascimento: " + this.birthCity + " }";
+    }
+}
